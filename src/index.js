@@ -43,12 +43,14 @@ async function main() {
 
     const comments = await octokit.issues.listComments(target)
 
-    console.log(comments.data)
+    const botComments = comments.data.filter(c => c.user.login === GITHUB_BOT_NAME)
 
-    // await octokit.issues.deleteComment({
-    //   ...target,
-    //   comment_id: 
-    // })
+    for (let comment of botComments) {
+      await octokit.issues.deleteComment({
+        ...target,
+        comment_id: comment.id,
+      })
+    }
 
     await octokit.issues.createComment({
       ...target,
