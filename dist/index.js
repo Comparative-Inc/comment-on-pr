@@ -5817,7 +5817,7 @@ async function main() {
 
     console.log({ owner, repo, eventName, eventPath, event, file })
 
-    if (eventName !== 'push' && eventName !== 'pull_request') {
+    if (eventName !== 'pull_request') {
       console.log(`Not running for event "${eventName}"`)
       return
     }
@@ -5829,6 +5829,7 @@ async function main() {
     const message = fs.readFileSync(file).toString()
 
     console.log('Fetching PR')
+    console.log({ owner, repo, pull_number })
     const pull = await octokit.pulls.get({ owner, repo, pull_number })
     
     const target = {
@@ -5838,6 +5839,7 @@ async function main() {
     }
 
     console.log('Fetching comments')
+    console.log(target)
     const comments = await octokit.issues.listComments(target)
 
     const botComments = comments.data.filter(c => c.user.login === GITHUB_BOT_NAME)
