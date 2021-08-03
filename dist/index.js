@@ -5826,6 +5826,9 @@ async function main() {
     const octokit = github.getOctokit(token)
 
     const filepath = core.getInput('file')
+
+    console.log({ filepath, cwd: process.cwd() })
+
     const message = fs.readFileSync(filepath).toString()
 
     const target = {
