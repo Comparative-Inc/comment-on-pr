@@ -36,6 +36,7 @@ async function main() {
     console.log('Fetching PR')
     console.log({ owner, repo, pull_number })
     const pull = await octokit.pulls.get({ owner, repo, pull_number })
+    console.log(pull)
     
     const target = {
       owner,
