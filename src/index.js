@@ -33,15 +33,17 @@ async function main() {
 
     const message = fs.readFileSync(file).toString()
 
+    const pull = await octokit.pulls.get({ owner, repo, pull_number })
+    
     const target = {
       owner,
       repo,
-      issue_number: pull_number,
+      issue_number: pull.data.issue_number,
     }
 
     const comments = await octokit.issues.listComments(target)
 
-    console.log(comments)
+    console.log(comments.data)
 
     // await octokit.issues.deleteComment({
     //   ...target,
