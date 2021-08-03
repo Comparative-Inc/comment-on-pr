@@ -6,10 +6,10 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const fs = require('fs')
 
+const GITHUB_BOT_NAME = 'github-actions[bot]'
+
 async function main() {
   try {
-    // `who-to-greet` input defined in action metadata file
-    // const nameToGreet = core.getInput('who-to-greet')
     console.log('Starting comment-on-pr...')
 
     const token = process.env.GITHUB_TOKEN
@@ -17,8 +17,9 @@ async function main() {
     const repo = process.env.GITHUB_REPOSITORY
     const eventName = process.env.GITHUB_EVENT_NAME
     const eventPath = process.env.GITHUB_EVENT_PATH
+    const file = core.getInput('file')
 
-    console.log({ owner, repo, eventName, eventPath })
+    console.log({ owner, repo, eventName, eventPath, file })
 
     if (eventName !== 'push' && eventName !== 'pull_request') {
       console.log(`Not running for event "${eventName}"`)
@@ -30,11 +31,7 @@ async function main() {
 
     const octokit = github.getOctokit(token)
 
-    const filepath = core.getInput('file')
-
-    console.log({ filepath, cwd: process.cwd(), files: fs.readdirSync('/tmp') })
-
-    const message = fs.readFileSync(filepath).toString()
+    const message = fs.readFileSync(file).toString()
 
     const target = {
       owner,
@@ -46,13 +43,18 @@ async function main() {
 
     console.log(comments)
 
+    // await octokit.issues.deleteComment({
+    //   ...target,
+    //   comment_id: 
+    // })
+
     await octokit.issues.createComment({
       ...target,
       body: message,
     })
 
   } catch (error) {
-    core.setFailed(error.message)
+    core.setFailed(error)
   }
 }
 
