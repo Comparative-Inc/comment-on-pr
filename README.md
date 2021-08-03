@@ -1,27 +1,18 @@
-# Comment on PR via GitHub Action
 
-A GitHub action to comment on the relevant open PR when a commit is pushed.
+# publish-to-github-action
 
-## Usage
+Forked from [mikeal/publish-to-github-action](https://github.com/mikeal/publish-to-github-action) to work on all
+supported OSes.
 
-- Requires the `GITHUB_TOKEN` secret.
-- Requires the comment's message in the `msg` parameter.
-- Supports `push` and `pull_request` event types.
+A GitHub Action to push any local file changes, including new files, back to supplied branch name.
 
-### Sample workflow
+This action is useful to put after other actions that modify files in the local checkout that you'd then like to persist back into the repository.
 
 ```
-name: comment-on-pr example
-on: pull_request
-jobs:
-  example:
-    name: sample comment
-    runs-on: ubuntu-latest
-    steps:
-      - name: comment PR
-        uses: unsplash/comment-on-pr@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          msg: "Check out this message!"
+Usage:
+
+- uses: romgrk/publish-to-github@master
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # BRANCH_NAME: '' # Not implemented. Always set to 'master'. File an issue if you need it.
 ```
