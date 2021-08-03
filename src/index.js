@@ -33,15 +33,10 @@ async function main() {
 
     const message = fs.readFileSync(file).toString()
 
-    console.log('Fetching PR')
-    console.log({ owner, repo, pull_number })
-    const pull = await octokit.pulls.get({ owner, repo, pull_number })
-    console.log(pull)
-    
     const target = {
       owner,
       repo,
-      issue_number: pull.data.issue_number,
+      issue_number: pull_number,
     }
 
     console.log('Fetching comments')
