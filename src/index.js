@@ -17,22 +17,23 @@ async function main() {
     const repo = process.env.GITHUB_REPOSITORY
     const eventName = process.env.GITHUB_EVENT_NAME
     const eventPath = process.env.GITHUB_EVENT_PATH
+    const event = JSON.parse(fs.readFileSync(eventPath).toString())
     const file = core.getInput('file')
 
-    console.log({ owner, repo, eventName, eventPath, file })
+    console.log({ owner, repo, eventName, eventPath, event, file })
 
     if (eventName !== 'push' && eventName !== 'pull_request') {
       console.log(`Not running for event "${eventName}"`)
       return
     }
 
-    const event = JSON.parse(fs.readFileSync(eventPath).toString())
     const pull_number = event.number
 
     const octokit = github.getOctokit(token)
 
     const message = fs.readFileSync(file).toString()
 
+    console.log('Fetching PR')
     const pull = await octokit.pulls.get({ owner, repo, pull_number })
     
     const target = {
@@ -41,10 +42,12 @@ async function main() {
       issue_number: pull.data.issue_number,
     }
 
+    console.log('Fetching comments')
     const comments = await octokit.issues.listComments(target)
 
     const botComments = comments.data.filter(c => c.user.login === GITHUB_BOT_NAME)
 
+    console.log('Deleting comments')
     for (let comment of botComments) {
       await octokit.issues.deleteComment({
         ...target,
@@ -52,6 +55,7 @@ async function main() {
       })
     }
 
+    console.log('Adding comment')
     await octokit.issues.createComment({
       ...target,
       body: message,
