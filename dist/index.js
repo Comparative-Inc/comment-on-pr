@@ -5851,6 +5851,8 @@ async function main() {
     })
 
   } catch (error) {
+    core.error(error.message)
+    core.error(error.stack)
     core.setFailed(error)
   }
 }
