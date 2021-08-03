@@ -5827,7 +5827,7 @@ async function main() {
 
     const filepath = core.getInput('file')
 
-    console.log({ filepath, cwd: process.cwd() })
+    console.log({ filepath, cwd: process.cwd(), files: fs.readdirSync('/tmp') })
 
     const message = fs.readFileSync(filepath).toString()
 
