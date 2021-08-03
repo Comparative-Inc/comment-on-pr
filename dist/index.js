@@ -5836,7 +5836,7 @@ async function main() {
 
     console.log('Fetching comments')
     console.log(target)
-    const comments = await octokit.issues.listComments(target)
+    const comments = await octokit.issues.listComments({ ...target, per_page: 100 })
 
     const botComments = comments.data.filter(c => c.user.login === GITHUB_BOT_NAME)
 
