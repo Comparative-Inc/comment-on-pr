@@ -37,11 +37,10 @@ end
 message = File.read(ARGV.join(''))
 
 coms = github.issue_comments(repo, pr_number)
-duplicate = coms.find { |c| c["user"]["login"] == "github-actions[bot]" && c["body"] == message }
+other = coms.find { |c| c["user"]["login"] == "github-actions[bot]" }
 
-if duplicate
-  puts "The PR already contains a database change notification"
-  exit(0)
+if other
+  github.delete_pull_request_comment(repo, other["id"])
 end
 
 github.add_comment(repo, pr_number, message)
