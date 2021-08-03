@@ -18,8 +18,10 @@ async function main() {
     const eventName = process.env.GITHUB_EVENT_NAME
     const eventPath = process.env.GITHUB_EVENT_PATH
 
-    if (eventName !== 'pull_request')
+    if (eventName !== 'pull_request') {
+      console.log(`Not running for event "${eventName}"`)
       return
+    }
 
     const event = JSON.parse(fs.readFileSync(eventPath).toString())
     const pull_number = event.number
