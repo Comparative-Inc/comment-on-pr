@@ -5813,7 +5813,7 @@ async function main() {
     const eventName = process.env.GITHUB_EVENT_NAME
     const eventPath = process.env.GITHUB_EVENT_PATH
 
-    console.log({ ownder, repo, eventName, eventPath })
+    console.log({ owner, repo, eventName, eventPath })
 
     if (eventName !== 'push' && eventName !== 'pull_request') {
       console.log(`Not running for event "${eventName}"`)
