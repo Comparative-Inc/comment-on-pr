@@ -13,8 +13,8 @@ async function main() {
     console.log('Starting comment-on-pr...')
 
     const token = process.env.GITHUB_TOKEN
-    const owner = process.env.GITHUB_ACTOR
-    const repo = process.env.GITHUB_REPOSITORY
+    // const actor = process.env.GITHUB_ACTOR
+    const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
     const eventName = process.env.GITHUB_EVENT_NAME
     const eventPath = process.env.GITHUB_EVENT_PATH
     const event = JSON.parse(fs.readFileSync(eventPath).toString())
